@@ -23,10 +23,6 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUsers();
-  }
-
-  getUsers(): void {
     this.apiService.getUsers().subscribe((data: any[]) => {
       this.users = data;
     });
@@ -39,10 +35,9 @@ export class UsersComponent implements OnInit {
     
     const newUser = this.userForm.value;
   
-    this.apiService.addUser(newUser).subscribe(response => {
-      const addedUser = { ...newUser, id: this.users.length + 1 }; 
-      
-      this.users.unshift(addedUser); 
+    this.apiService.addUser(newUser).subscribe(() => {
+      const addedUser = { id: this.users.length + 1, ...newUser }; 
+      this.users.push(addedUser); 
       this.userForm.reset();
     });
   }
@@ -65,7 +60,7 @@ export class UsersComponent implements OnInit {
     const updatedUser = this.userForm.value;
 
     this.apiService.updateUser(this.selectedUserId, updatedUser).subscribe(() => {
-      const index = this.users.findIndex(u => u.id === this.selectedUserId);
+      const index = this.users.findIndex(user => user.id === this.selectedUserId);
       this.users[index] = { ...updatedUser, id: this.selectedUserId };
       
       this.isEditMode = false;
@@ -76,7 +71,7 @@ export class UsersComponent implements OnInit {
 
   deleteUser(id: number): void {
     this.apiService.deleteUser(id).subscribe(() => {
-      this.users = this.users.filter(u => u.id !== id);
+      this.users = this.users.filter(user=> user.id !== id);
     });
   }
 }

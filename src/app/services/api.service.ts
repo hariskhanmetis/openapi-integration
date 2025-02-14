@@ -22,7 +22,7 @@ export class ApiService {
     return this.http.delete<any>(`${this.apiURL}/${id}`);
   }
 
-  updateUser(id: any ,user: any): Observable<any> {
+  updateUser(id: any, user: any): Observable<any> {
     return this.http.put(`${this.apiURL}/${id}`, user);
   }
 }
