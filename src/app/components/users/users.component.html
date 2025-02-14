@@ -1,0 +1,33 @@
+<h2>User Management (with OpenAPI)</h2>
+
+<form [formGroup]="userForm" (ngSubmit)="isEditMode ? updateUser() : addUser()">
+  <input type="text" formControlName="name" placeholder="Name" required>
+  <input type="text" formControlName="username" placeholder="Username" required>
+  <input type="email" formControlName="email" placeholder="Email" required>
+  <input type="text" formControlName="phone" placeholder="Phone" required>
+  <button class="add-user" type="submit">{{ isEditMode ? 'Update User' : 'Add User' }}</button>
+</form>
+
+<table class="table-container">
+    <thead>
+        <tr>
+        <th>Name</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users">
+        <td>{{ user.name }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.phone }}</td>
+        <td>
+            <button class="edit-user" (click)="editUser(user)">Edit</button>
+            <button class="delete-user" (click)="deleteUser(user.id)">Delete</button>
+        </td>
+        </tr>
+    </tbody>
+</table>
