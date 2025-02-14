@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -12,6 +13,7 @@ export class UsersComponent implements OnInit {
   userForm: FormGroup;
   isEditMode = false;
   selectedUserId: number | null = null;
+  private userSubscription!: Subscription;
 
   constructor(private apiService: ApiService, formBuilder: FormBuilder) {
     this.userForm = formBuilder.group({
@@ -23,7 +25,7 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.apiService.getUsers().subscribe((data: any[]) => {
+    this.userSubscription = this.apiService.getUsers().subscribe((data: any[]) => {
       this.users = data;
     });
   }
@@ -73,5 +75,12 @@ export class UsersComponent implements OnInit {
     this.apiService.deleteUser(id).subscribe(() => {
       this.users = this.users.filter(user=> user.id !== id);
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+      console.log('Unsubscribed from API');
+    }
   }
 }
