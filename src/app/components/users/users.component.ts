@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
   users: any[] = [];
   userForm: FormGroup;
   isEditMode = false;
@@ -34,16 +34,16 @@ export class UsersComponent implements OnInit {
     if (this.userForm.invalid) {
       return;
     }
-    
+
     const newUser = this.userForm.value;
-  
+
     this.apiService.addUser(newUser).subscribe(() => {
-      const addedUser = { id: this.users.length + 1, ...newUser }; 
-      this.users.push(addedUser); 
+      const addedUser = { id: this.users.length + 1, ...newUser };
+      this.users.push(addedUser);
       this.userForm.reset();
     });
   }
-  
+
   editUser(user: any): void {
     this.isEditMode = true;
     this.selectedUserId = user.id;
@@ -64,7 +64,7 @@ export class UsersComponent implements OnInit {
     this.apiService.updateUser(this.selectedUserId, updatedUser).subscribe(() => {
       const index = this.users.findIndex(user => user.id === this.selectedUserId);
       this.users[index] = { ...updatedUser, id: this.selectedUserId };
-      
+
       this.isEditMode = false;
       this.selectedUserId = null;
       this.userForm.reset();
@@ -73,14 +73,14 @@ export class UsersComponent implements OnInit {
 
   deleteUser(id: number): void {
     this.apiService.deleteUser(id).subscribe(() => {
-      this.users = this.users.filter(user=> user.id !== id);
+      this.users = this.users.filter(user => user.id !== id);
     });
   }
 
   ngOnDestroy(): void {
-    if (this.userSubscription) {
+   // if (this.userSubscription) {
       this.userSubscription.unsubscribe();
       console.log('Unsubscribed from API');
-    }
+   // }
   }
 }

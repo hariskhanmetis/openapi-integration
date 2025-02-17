@@ -1,12 +1,14 @@
-<h2>User Management (with OpenAPI)</h2>
+<h2>User Management (CRUD with OpenAPI)</h2>
 
-<form [formGroup]="userForm" (ngSubmit)="isEditMode ? updateUser() : addUser()">
+<form [formGroup]="userForm" (ngSubmit)="isEditMode === true ? updateUser() : addUser()">
   <input type="text" formControlName="name" placeholder="Name" required>
   <input type="text" formControlName="username" placeholder="Username" required>
   <input type="email" formControlName="email" placeholder="Email" required>
   <input type="text" formControlName="phone" placeholder="Phone" required>
-  <button class="add-user" type="submit">{{ isEditMode ? 'Update User' : 'Add User' }}</button>
+  <button class="add-user" type="submit">{{ isEditMode ===  true ? 'Update User' : 'Add User' }}</button>
 </form>
+
+<button routerLink="/test">test component</button>
 
 <table class="table-container">
     <thead>
